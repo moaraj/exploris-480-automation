@@ -1,0 +1,19 @@
+name: Syntax checks
+on:
+  push:
+  pull_request:
+permissions:
+  contents: read
+jobs:
+  syntax:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Compile Python without executing it
+        run: python -m py_compile scripts/exploris_worklist_watcher.py
+      - name: Parse scripts using Windows PowerShell
+        shell: powershell
+        run: .\tests\check-powershell-syntax.ps1
